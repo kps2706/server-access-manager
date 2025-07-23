@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccessRule;
 use Illuminate\Http\Request;
 
 class AccessRuleController extends Controller
@@ -12,6 +13,8 @@ class AccessRuleController extends Controller
     public function index()
     {
         //
+        $accessRules = AccessRule::all();
+        return view('access-rules.index', compact('accessRules'));
     }
 
     /**
@@ -20,6 +23,7 @@ class AccessRuleController extends Controller
     public function create()
     {
         //
+        return view('access-rules.create');
     }
 
     /**
@@ -28,6 +32,17 @@ class AccessRuleController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'source_ip' => 'required|ip',
+            'destination_ip' => 'required|ip',
+            'port' => 'required|integer',
+            'protocol' => 'required|string',
+            'is_allowed' => 'required|boolean',
+            'remarks' => 'nullable|string',
+        ]);
+
+        AccessRule::create($validated);
+        return redirect()->route('access-rules.index')->with('success', 'Access Rule created successfully.');
     }
 
     /**
@@ -41,24 +56,38 @@ class AccessRuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(AccessRule  $accessRule)
     {
         //
+        return view('access-rules.edit', compact('accessRule'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, AccessRule $accessRule)
     {
         //
+        $validated = $request->validate([
+            'source_ip' => 'required|ip',
+            'destination_ip' => 'required|ip',
+            'port' => 'required|integer',
+            'protocol' => 'required|string',
+            'is_allowed' => 'required|boolean',
+            'remarks' => 'nullable|string',
+        ]);
+
+        $accessRule->update($validated);
+        return redirect()->route('access-rules.index')->with('success', 'Access Rule updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AccessRule $accessRule)
     {
         //
+        $accessRule->delete();
+        return redirect()->route('access-rules.index')->with('success', 'Access Rule deleted successfully.');
     }
 }

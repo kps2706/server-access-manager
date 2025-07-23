@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Server;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class ServerController extends Controller
@@ -12,6 +14,8 @@ class ServerController extends Controller
     public function index()
     {
         //
+        $servers = Server::with('vendor')->latest()->paginate(10);
+        return view('servers.index', compact('servers'));
     }
 
     /**
@@ -20,6 +24,8 @@ class ServerController extends Controller
     public function create()
     {
         //
+        $vendors = Vendor::all();
+        return view('servers.create', compact('vendors'));
     }
 
     /**
@@ -28,6 +34,18 @@ class ServerController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'hostname' => 'required|string',
+            'ip_address' => 'required|ip',
+            'zone' => 'required',
+            'vendor_id' => 'required|exists:vendors,id',
+            'os' => 'nullable|string',
+            'location' => 'required',
+            'environment' => 'required'
+        ]);
+
+        Server::create($request->all());
+        return redirect()->route('server.index')->with('success', 'Server added successfully.');
     }
 
     /**
@@ -41,24 +59,40 @@ class ServerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Server $server)
     {
         //
+        $vendors = Vendor::all();
+        return view('servers.edit', compact('server', 'vendors'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Server $server)
     {
         //
+        $request->validate([
+            'hostname' => 'required|string',
+            'ip_address' => 'required|ip',
+            'zone' => 'required',
+            'vendor_id' => 'required|exists:vendors,id',
+            'os' => 'nullable|string',
+            'location' => 'required',
+            'environment' => 'required'
+        ]);
+
+        $server->update($request->all());
+        return redirect()->route('server.index')->with('success', 'Server updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Server $server)
     {
         //
+        $server->delete();
+        return redirect()->route('server.index')->with('success', 'Server deleted successfully.');
     }
 }

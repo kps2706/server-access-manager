@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('hostname');
             $table->ipAddress('ip_address')->unique();
             $table->enum('zone', ['MZ', 'DMZ']);
-            $table->foreignId('vendor_id')->constrained('vendors')->onDelete('cascade')->nullable();
+            $table->foreignId('vendor_id')->constrained('vendors')->onDelete('cascade'); // references 'id' by default
             $table->string('os')->nullable();
             $table->enum('location', ['DC', 'DR'])->nullable();
             $table->enum('environment', ['Production', 'Staging', 'Development'])->nullable();

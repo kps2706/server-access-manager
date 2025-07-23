@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -12,6 +13,8 @@ class VendorController extends Controller
     public function index()
     {
         //
+        $vendors = Vendor::all();
+        return view('vendors.index', compact('vendors'));
     }
 
     /**
@@ -20,6 +23,7 @@ class VendorController extends Controller
     public function create()
     {
         //
+        return view('vendors.create');
     }
 
     /**
@@ -28,6 +32,8 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         //
+        Vendor::create($request->all());
+        return redirect()->route('vendor.index');
     }
 
     /**
@@ -41,24 +47,29 @@ class VendorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Vendor $vendor)
     {
         //
+        return view('vendors.edit', compact('vendor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Vendor $vendor)
     {
         //
+        $vendor->update($request->all());
+        return redirect()->route('vendor.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Vendor $vendor)
     {
         //
+        $vendor->delete();
+        return redirect()->route('vendor.index');
     }
 }

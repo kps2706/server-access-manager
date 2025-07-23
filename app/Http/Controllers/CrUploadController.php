@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CrUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CrUploadController extends Controller
 {
@@ -12,6 +15,8 @@ class CrUploadController extends Controller
     public function index()
     {
         //
+        $uploads = CrUpload::with('uploader')->latest()->get();
+        return view('cr_uploads.index', compact('uploads'));
     }
 
     /**
@@ -20,6 +25,7 @@ class CrUploadController extends Controller
     public function create()
     {
         //
+        return view('cr_uploads.create');
     }
 
     /**
@@ -28,6 +34,21 @@ class CrUploadController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv'
+        ]);
+
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('cr_uploads', $filename, 'public');
+
+        CrUpload::create([
+            'filename' => $filename,
+            'uploaded_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('cr-uploads.index')->with('success', 'File uploaded successfully!');
+
     }
 
     /**
