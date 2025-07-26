@@ -13,7 +13,7 @@ class VendorController extends Controller
     public function index()
     {
         //
-        $vendors = Vendor::all();
+        $vendors = Vendor::where('vendor_id', '!=', 'SYS001')->get();
         return view('vendors.index', compact('vendors'));
     }
 
