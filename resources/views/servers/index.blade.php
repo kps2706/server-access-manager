@@ -16,6 +16,10 @@
                         <div class="page-header-subtitle">Use this blank page as a starting point for creating new pages inside your project!</div>
                     </div>
                     <div class="col-12 col-xl-auto mt-4">
+                        <a class="btn btn-sm btn-light text-primary" href="{{route('servers.upload')}}">
+                            <i class="me-1" data-feather="upload-cloud"></i>
+                            Upload Servers
+                        </a>
                         <a class="btn btn-sm btn-light text-primary" href="{{route('server.create')}}">
                             <i class="me-1" data-feather="server"></i>
                             Add New Server
@@ -29,6 +33,19 @@
     <div class="container-xl px-4 mt-n10">
         <div class="card">
             <div class="card-header">Server Details</div>
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="card-body">
                 <table class="table table-bordered">
                     <thead>

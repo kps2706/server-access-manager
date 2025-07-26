@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/servers/upload', [ServerController::class, 'upload'])->name('servers.upload');
+Route::post('/servers/import', [ServerController::class, 'import'])->name('servers.import');
 
 Route::middleware('auth')->group(function(){
     Route::resource('vendor', VendorController::class);
@@ -30,3 +32,6 @@ Route::middleware('auth')->group(function(){
     Route::resource('access-rules', AccessRuleController::class);
     Route::resource('cr-uploads', CrUploadController::class);
 });
+
+
+

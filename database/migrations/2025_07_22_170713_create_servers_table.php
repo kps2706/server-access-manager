@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('os')->nullable();
             $table->enum('location', ['DC', 'DR'])->nullable();
             $table->enum('environment', ['Production', 'Staging', 'Development'])->nullable();
+            $table->string('assetType')->nullable();
+            $table->string('license_file')->nullable(); // <- new
+            $table->string('invoice_file')->nullable(); // <- new
             $table->timestamps();
         });
     }

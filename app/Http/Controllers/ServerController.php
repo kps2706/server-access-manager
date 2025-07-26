@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use file;
 use App\Models\Server;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use App\Imports\ServerImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ServerController extends Controller
 {
@@ -26,6 +29,11 @@ class ServerController extends Controller
         //
         $vendors = Vendor::all();
         return view('servers.create', compact('vendors'));
+    }
+    public function upload()
+    {
+        //
+        return view('servers.upload.create');
     }
 
     /**
@@ -94,5 +102,24 @@ class ServerController extends Controller
         //
         $server->delete();
         return redirect()->route('server.index')->with('success', 'Server deleted successfully.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel' => 'required|file|mimes:xlsx,csv,xls',
+            'license_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'invoice_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+        ]);
+
+        // Store license and invoice files
+        $licensePath = $request->file('license_file')?->store('uploads/licenses', 'public');
+        $invoicePath = $request->file('invoice_file')?->store('uploads/invoices', 'public');
+
+        // Handle Excel import
+        Excel::import(new ServerImport($licensePath, $invoicePath), $request->file('excel'));
+        //  dd('Import complete');
+
+        return redirect()->route('server.index')->with('success', 'Servers imported successfully.');
     }
 }
