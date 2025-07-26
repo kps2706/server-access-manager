@@ -9,29 +9,26 @@
                 <div class="me-4 mb-3 mb-sm-0">
                     <h1 class="mb-0">Dashboard</h1>
                     <div class="small">
-                        <span class="fw-500 text-primary">Friday</span>
-                        &middot; September 20, 2021 &middot; 12:16 PM
+                        <span class="fw-500 text-primary">{{ \Carbon\Carbon::now()->format('l') }}</span>
+                        &middot; {{ \Carbon\Carbon::now()->format('F d, Y') }}
+                        &middot; {{ \Carbon\Carbon::now()->format('h:i A') }}
                     </div>
                 </div>
-                <!-- Date range picker example-->
-                <div class="input-group input-group-joined border-0 shadow" style="width: 16.5rem">
-                    <span class="input-group-text"><i data-feather="calendar"></i></span>
-                    <input class="form-control ps-0 pointer" id="litepickerRangePlugin" placeholder="Select date range..." />
-                </div>
+
             </div>
             <!-- Illustration dashboard card example-->
             <div class="card card-waves mb-4 mt-5">
                 <div class="card-body p-5">
                     <div class="row align-items-center justify-content-between">
                         <div class="col">
-                            <h2 class="text-primary">Welcome back, your dashboard is ready!</h2>
-                            <p class="text-gray-700">Great job, your affiliate dashboard is ready to go! You can view sales, generate links, prepare coupons, and download affiliate reports using this dashboard.</p>
+                            <h2 class="text-primary">Welcome back {{ Auth::user()->name }}, your dashboard is ready!</h2>
+                            <p class="text-gray-700">Your dashboard is up and running. Use it to manage vendors, track server access, monitor onboarding, and review all operational insights in one place.</p>
                             <a class="btn btn-primary p-3" href="#!">
                                 Get Started
                                 <i class="ms-1" data-feather="arrow-right"></i>
                             </a>
                         </div>
-                        <div class="col d-none d-lg-block mt-xxl-n4"><img class="img-fluid px-xl-4 mt-xxl-n5" src="assets/img/illustrations/statistics.svg" /></div>
+                        <div class="col d-none d-lg-block mt-xxl-n4"><img class="img-fluid px-xl-4 mt-xxl-n5" src=" {{asset('backend/assets/img/illustrations/statistics.svg')}}" /></div>
                     </div>
                 </div>
             </div>
@@ -42,14 +39,14 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
-                                    <div class="small fw-bold text-primary mb-1">Earnings (monthly)</div>
-                                    <div class="h5">$4,390</div>
+                                    <div class="small fw-bold text-primary mb-1">Servers</div>
+                                    <div class="h5">{{ $serverCount }}</div>
                                     <div class="text-xs fw-bold text-success d-inline-flex align-items-center">
                                         <i class="me-1" data-feather="trending-up"></i>
                                         12%
                                     </div>
                                 </div>
-                                <div class="ms-2"><i class="fas fa-dollar-sign fa-2x text-gray-200"></i></div>
+                                <div class="ms-2"><i class="fas fa-server fa-2x text-gray-200"></i></div>
                             </div>
                         </div>
                     </div>
@@ -60,14 +57,14 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
-                                    <div class="small fw-bold text-secondary mb-1">Average sale price</div>
-                                    <div class="h5">$27.00</div>
+                                    <div class="small fw-bold text-secondary mb-1">Vendor Onboarded</div>
+                                    <div class="h5">{{$vendorCount}}</div>
                                     <div class="text-xs fw-bold text-danger d-inline-flex align-items-center">
                                         <i class="me-1" data-feather="trending-down"></i>
                                         3%
                                     </div>
                                 </div>
-                                <div class="ms-2"><i class="fas fa-tag fa-2x text-gray-200"></i></div>
+                                <div class="ms-2"><i class="fas fa-users fa-2x text-gray-200"></i></div>
                             </div>
                         </div>
                     </div>
@@ -114,7 +111,7 @@
                     <!-- Illustration card example-->
                     <div class="card mb-4">
                         <div class="card-body text-center p-5">
-                            <img class="img-fluid mb-5" src="assets/img/illustrations/data-report.svg" />
+                            <img class="img-fluid mb-5" src="{{asset('backend/assets/img/illustrations/data-report.svg')}}" />
                             <h4>Report generation</h4>
                             <p class="mb-4">Ready to get started? Let us know now! It's time to start building that dashboard you've been waiting to create!</p>
                             <a class="btn btn-primary p-3" href="#!">Continue</a>
