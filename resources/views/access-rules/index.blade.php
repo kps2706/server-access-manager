@@ -31,7 +31,7 @@
         <div class="card">
             <div class="card-header">Access Rule Details</div>
             <div class="card-body">
-                <table class="table table-bordered table-striped">
+                <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Source IP</th>

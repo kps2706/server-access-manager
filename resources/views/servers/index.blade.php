@@ -47,7 +47,7 @@
                 </div>
             @endif
             <div class="card-body">
-                <table class="table table-bordered">
+            <table  id="datatablesSimple" >
                     <thead>
                         <tr>
                             <th>Hostname</th>

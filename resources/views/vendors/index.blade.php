@@ -29,7 +29,7 @@
         <div class="card">
             <div class="card-header">Vendor Details</div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table id="datatablesSimple">
                     <thead>
                         <tr>
                             <th>Vendor ID</th>

@@ -31,7 +31,7 @@
         <div class="card">
             <div class="card-header">CR Details</div>
             <div class="card-body">
-                <table class="table">
+                <table id="datatablesSimple">
                     <thead>
                         <tr>
                             <th>#</th>

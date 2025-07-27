@@ -8,6 +8,7 @@
         <meta name="author" content="" />
        <title>@yield('title', 'Server Access Control Pro')</title>
         <link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="{{asset('backend/css/styles.css')}}" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="{{asset('backend/assets/img/favicon.png')}}" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -29,5 +30,7 @@
         <script src="{{asset('backend/assets/demo/chart-pie-demo.js')}} "></script>
         <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js" crossorigin="anonymous"></script>
         <script src="{{asset('backend/js/litepicker.js')}} "></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="{{asset('backend/js/datatables/datatables-simple-demo.js')}}"></script>
     </body>
 </html>
