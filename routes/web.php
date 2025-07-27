@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CrUploadController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccessRuleController;
+use App\Http\Controllers\GlobalRuleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,11 +28,14 @@ require __DIR__.'/auth.php';
 Route::get('/servers/upload', [ServerController::class, 'upload'])->name('servers.upload');
 Route::post('/servers/import', [ServerController::class, 'import'])->name('servers.import');
 
+Route::get('/servers/export', [ServerController::class, 'export'])->name('server.export');
+
 Route::middleware('auth')->group(function(){
     Route::resource('vendor', VendorController::class);
     Route::resource('server', ServerController::class);
     Route::resource('access-rules', AccessRuleController::class);
     Route::resource('cr-uploads', CrUploadController::class);
+    Route::resource('global-rules', GlobalRuleController::class);
 });
 
 

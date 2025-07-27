@@ -3,22 +3,58 @@
 namespace App\Http\Controllers;
 
 use file;
+use Exception;
 use App\Models\Server;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use App\Imports\ServerImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Crypt;
+use App\Exports\FilteredServerExport;
 
 class ServerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $servers = Server::with('vendor')->latest()->paginate(10);
-        return view('servers.index', compact('servers'));
+        $query = Server::with('vendor');
+
+    // Decrypt and apply filters only if they are present
+        if ($request->filled('zone')) {
+            try {
+                $zone = Crypt::decrypt($request->zone);
+                $query->where('zone', $zone);
+            } catch (Exception $e) {
+                // Log error or ignore invalid decryption
+            }
+        }
+
+        if ($request->filled('vendor_id')) {
+            try {
+                $vendor_id = Crypt::decrypt($request->vendor_id);
+                $query->where('vendor_id', $vendor_id);
+            } catch (\Exception $e) {
+                //
+            }
+        }
+
+        if ($request->filled('environment')) {
+            try {
+                $environment = Crypt::decrypt($request->environment);
+                // Assuming environment is stored as a string in the database
+                $query->where('environment', $environment);
+            } catch (Exception $e) {
+                // Log error or ignore invalid decryption
+            }
+        }
+
+        $servers = $query->get(); // No pagination for DataTables
+        $vendors = Vendor::all(); // for dropdown
+
+        return view('servers.index', compact('servers','vendors'));
     }
 
     /**
@@ -122,4 +158,15 @@ class ServerController extends Controller
 
         return redirect()->route('server.index')->with('success', 'Servers imported successfully.');
     }
+
+        public function export(Request $request)
+        {
+            $zone = $request->zone ;
+            $vendor_id = $request->vendor_id;
+            $environment = $request->environment;
+
+            // dd($zone, $vendor_id, $environment);
+
+            return Excel::download(new FilteredServerExport($zone, $vendor_id, $environment), 'servers_export.xlsx');
+        }
 }

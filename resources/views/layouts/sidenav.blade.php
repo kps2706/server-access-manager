@@ -55,6 +55,11 @@
                     Servers
                 </a>
                 <!-- Sidenav Link (Tables)-->
+                <a class="nav-link" href="{{route('global-rules.index')}}">
+                    <div class="nav-link-icon"><i data-feather="crosshair"></i></div>
+                    Global Rules
+                </a>
+                <!-- Sidenav Link (Tables)-->
                 <a class="nav-link" href="{{route('access-rules.index')}}">
                     <div class="nav-link-icon"><i data-feather="crosshair"></i></div>
                     Access Rules

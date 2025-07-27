@@ -47,6 +47,99 @@
                 </div>
             @endif
             <div class="card-body">
+                <form method="GET" action="{{ route('server.index') }}" class="mb-3 row">
+                    <div class="col-md-3">
+                        <select name="zone" class="form-control">
+                            <option value="">All Zones</option>
+                            <option value="{{encrypt('MZ')}}" {{ request('zone') === encrypt('MZ') ? 'selected' : '' }}>MZ</option>
+                            <option value="{{encrypt('DMZ')}}" {{ request('zone') === encrypt('DMZ') ? 'selected' : '' }}>DMZ</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="vendor_id" class="form-control">
+                            <option value="">All Vendors</option>
+                            @foreach($vendors as $vendor)
+                                <option value="{{ encrypt($vendor->id) }}" {{ request('vendor_id') === encrypt($vendor->id) ? 'selected' : '' }}>
+                                    {{ $vendor->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="environment" class="form-control">
+                            <option value="">All Environments</option>
+                            <option value="{{encrypt('Production')}}" {{ request('environment') === encrypt('Production') ? 'selected' : '' }}>Production</option>
+                            <option value="{{encrypt('Staging')}}" {{ request('environment') === encrypt('Staging') ? 'selected' : '' }}>Staging</option>
+                            <option value="{{encrypt('Development')}}" {{ request('environment') === encrypt('Development') ? 'selected' : '' }}>Development</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+                {{-- Code for Donwload Button --}}
+                @php
+                    $exportParams = [
+                        'zone' => request('zone') ? Crypt::decrypt(request('zone')) : null,
+                        'vendor_id' => request('vendor_id') ? Crypt::decrypt(request('vendor_id')) : null,
+                        'environment' => request('environment') ? Crypt::decrypt(request('environment')) : null,
+                    ];
+
+                    // dd($exportParams); // Debugging line to check the export parameters
+
+                @endphp
+
+                <a href="{{ route('server.export', $exportParams) }}" class="btn btn-success btn-sm mb-2">
+                    <i class="fas fa-download"></i> Download Filtered Data
+                </a>
+                {{-- Code for showing the fillter applied --}}
+            @php
+                use Illuminate\Support\Facades\Crypt;
+
+                $decryptedZone = null;
+                $decryptedEnvironment = null;
+                $decryptedVendorId = null;
+
+                try {
+                    if (request()->filled('zone')) {
+                        $decryptedZone = Crypt::decrypt(request('zone'));
+                    }
+                    if (request()->filled('environment')) {
+                        $decryptedEnvironment = Crypt::decrypt(request('environment'));
+                    }
+                    if (request()->filled('vendor_id')) {
+                        $decryptedVendorId = Crypt::decrypt(request('vendor_id'));
+                    }
+                } catch (\Exception $e) {
+                    // silently fail or log error
+                }
+            @endphp
+
+            @if(request()->hasAny(['zone', 'vendor_id', 'environment']))
+                <div class="mb-2">
+                    <strong>Filters Applied:</strong>
+
+                    @if($decryptedZone)
+                        <span class="badge bg-info">{{ $decryptedZone }}</span>
+                    @endif
+
+                    @if($decryptedVendorId)
+                        @php
+                            $vendorName = $vendors->firstWhere('id', $decryptedVendorId)?->name ?? 'Unknown Vendor';
+                        @endphp
+                        <span class="badge bg-info">{{ $vendorName }}</span>
+                    @endif
+
+                    @if($decryptedEnvironment)
+                        <span class="badge bg-info">{{ $decryptedEnvironment }}</span>
+                    @endif
+
+                    <a href="{{ route('server.index') }}" class="btn btn-sm btn-secondary ms-2">Clear</a>
+                </div>
+            @endif
             <table  id="datatablesSimple" >
                     <thead>
                         <tr>
